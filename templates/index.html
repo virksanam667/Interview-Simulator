@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Interview Simulator</title>
+</head>
+
+<body>
+
+    <h1>AI Interview Simulator</h1>
+
+    <p>Practice an interview tailored to the job you want.</p>
+
+    <form action="/start" method="POST" enctype="multipart/form-data">
+
+        <h2>Your Resume</h2>
+
+        <input
+            type="file"
+            name="resume"
+            accept=".pdf"
+            required
+        >
+
+        <h2>Job Description</h2>
+
+        <textarea
+            name="job_description"
+            rows="10"
+            cols="60"
+            placeholder="Paste the job description here..."
+            required
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Start Interview
+        </button>
+
+    </form>
+
+</body>
+</html>

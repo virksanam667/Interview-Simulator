@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview | AI Interview Simulator</title>
+</head>
+
+<body>
+
+    <h1>AI Interview Simulator</h1>
+
+    <h3>Question {{ question_number }} of 5</h3>
+
+    <h2>Interviewer</h2>
+
+    <p>{{ question }}</p>
+
+    <form action="/answer" method="POST">
+
+        <h2>Your Answer</h2>
+
+        <textarea
+            name="answer"
+            rows="8"
+            cols="70"
+            placeholder="Type your answer here..."
+            required
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Submit Answer
+        </button>
+
+    </form>
+
+</body>
+</html>
