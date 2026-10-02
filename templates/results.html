@@ -1,24 +1,376 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
+
 <head>
-    <title>Results | AI Interview Simulator</title>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Results | InterviewAI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
+
 
 <body>
 
-    <h1>Interview Complete</h1>
 
-    <h2>Your Interview Evaluation</h2>
+<nav>
 
-    <div>
-        {{ evaluation }}
+    <div class="logo">
+        InterviewAI
     </div>
 
-    <br><br>
+    <div class="nav-label">
+        Interview Complete
+    </div>
 
-    <a href="/">
-        <button>Start Another Interview</button>
+</nav>
+
+
+<main class="results-container">
+
+
+    <section class="results-header">
+
+
+        <span class="eyebrow">
+
+            INTERVIEW COMPLETE
+
+        </span>
+
+
+        <h1>
+
+            Your Interview Performance
+
+        </h1>
+
+
+        <p>
+
+            Here's what went well and
+            where you can improve.
+
+        </p>
+
+
+    </section>
+
+
+    <!-- SCORES -->
+
+    <section class="score-grid">
+
+
+        <div class="overall-score-card">
+
+
+            <span>
+                Overall Score
+            </span>
+
+
+            <div class="score">
+
+                {{ evaluation.overall_score }}
+
+                <small>
+                    /100
+                </small>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="category-card">
+
+
+            <h2>
+                Score Breakdown
+            </h2>
+
+
+            <div class="metric">
+
+                <span>
+                    Relevance
+                </span>
+
+                <strong>
+                    {{ evaluation.relevance }}/20
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Specificity
+                </span>
+
+                <strong>
+                    {{ evaluation.specificity }}/20
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Examples
+                </span>
+
+                <strong>
+                    {{ evaluation.examples }}/20
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Communication
+                </span>
+
+                <strong>
+                    {{ evaluation.communication }}/20
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Structure
+                </span>
+
+                <strong>
+                    {{ evaluation.structure }}/20
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- STRONG / WEAK -->
+
+    <section class="feedback-grid">
+
+
+        <div class="feedback-card positive">
+
+
+            <span class="card-label">
+
+                STRONGEST ANSWER
+
+            </span>
+
+
+            <h2>
+
+                {{ evaluation.strongest_answer }}
+
+            </h2>
+
+
+            <p>
+
+                {{ evaluation.strongest_reason }}
+
+            </p>
+
+
+        </div>
+
+
+        <div class="feedback-card improvement">
+
+
+            <span class="card-label">
+
+                NEEDS MOST IMPROVEMENT
+
+            </span>
+
+
+            <h2>
+
+                {{ evaluation.weakest_answer }}
+
+            </h2>
+
+
+            <p>
+
+                {{ evaluation.weakest_reason }}
+
+            </p>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- SUMMARY -->
+
+    <section class="summary-card">
+
+
+        <h2>
+            Overall Feedback
+        </h2>
+
+
+        <p>
+
+            {{ evaluation.overall_feedback }}
+
+        </p>
+
+
+        <div class="summary-columns">
+
+
+            <div>
+
+
+                <h3>
+                    Strengths
+                </h3>
+
+
+                <ul>
+
+                    {% for strength in evaluation.strengths %}
+
+                        <li>
+                            {{ strength }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+
+            </div>
+
+
+            <div>
+
+
+                <h3>
+                    Focus Next Time
+                </h3>
+
+
+                <ul>
+
+                    {% for improvement in evaluation.improvements %}
+
+                        <li>
+                            {{ improvement }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- TRANSCRIPT -->
+
+    <section class="transcript-section">
+
+
+        <h2>
+            Review Your Answers
+        </h2>
+
+
+        {% for item in transcript %}
+
+
+            <div class="transcript-card">
+
+
+                <span>
+
+                    Question {{ loop.index }}
+
+                </span>
+
+
+                <h3>
+
+                    {{ item.question }}
+
+                </h3>
+
+
+                <p>
+
+                    {{ item.answer }}
+
+                </p>
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+    </section>
+
+
+    <a
+        href="/"
+        class="restart-link"
+    >
+
+        Start Another Interview
+
     </a>
 
+
+</main>
+
+
 </body>
+
 </html>

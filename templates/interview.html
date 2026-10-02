@@ -1,38 +1,463 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
+
 <head>
-    <title>Interview | AI Interview Simulator</title>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Interview | InterviewAI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
+
 
 <body>
 
-    <h1>AI Interview Simulator</h1>
 
-    <h3>Question {{ question_number }} of 5</h3>
+<nav>
 
-    <h2>Interviewer</h2>
+    <div class="logo">
+        InterviewAI
+    </div>
 
-    <p>{{ question }}</p>
+    <div class="question-counter">
 
-    <form action="/answer" method="POST">
+        Question {{ question_number }}
+        of {{ total_questions }}
 
-        <h2>Your Answer</h2>
+    </div>
+
+</nav>
+
+
+<main class="interview-container">
+
+
+    <!-- PROGRESS BAR -->
+
+    <div class="progress">
+
+        {% for i in range(
+            1,
+            total_questions + 1
+        ) %}
+
+            <div
+                class="
+                    progress-dot
+                    {% if i <= question_number %}
+                        active
+                    {% endif %}
+                "
+            >
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- CAMERA -->
+
+    <section class="video-card">
+
+        <video
+            id="camera"
+            autoplay
+            muted
+            playsinline
+        >
+        </video>
+
+
+        <div
+            id="cameraStatus"
+            class="camera-status"
+        >
+
+            Starting camera...
+
+        </div>
+
+    </section>
+
+
+    <!-- INTERVIEWER -->
+
+    <section class="interviewer-card">
+
+
+        <div class="avatar">
+            AI
+        </div>
+
+
+        <div>
+
+            <span class="speaker-label">
+                INTERVIEWER
+            </span>
+
+
+            <h1
+                class="question"
+                id="interviewQuestion"
+            >
+
+                {{ question }}
+
+            </h1>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ANSWER -->
+
+    <form
+        class="answer-card"
+        action="/answer"
+        method="POST"
+    >
+
+
+        <label for="answer">
+            Your response
+        </label>
+
 
         <textarea
+
+            id="answer"
+
             name="answer"
-            rows="8"
-            cols="70"
-            placeholder="Type your answer here..."
+
+            placeholder="Your spoken answer will appear here..."
+
             required
+
         ></textarea>
 
-        <br><br>
 
-        <button type="submit">
-            Submit Answer
-        </button>
+        <!-- VOICE -->
+
+        <div class="voice-controls">
+
+
+            <button
+
+                type="button"
+
+                id="recordButton"
+
+                class="record-button"
+
+            >
+
+                🎙 Start Answer
+
+            </button>
+
+
+            <span id="recordingStatus">
+
+                Ready
+
+            </span>
+
+
+        </div>
+
+
+        <div class="answer-footer">
+
+
+            <span>
+
+                You can edit the transcript
+                before submitting.
+
+            </span>
+
+
+            <button
+
+                class="primary-button small"
+
+                type="submit"
+
+            >
+
+                {% if question_number == total_questions %}
+
+                    Finish Interview →
+
+                {% else %}
+
+                    Submit Answer →
+
+                {% endif %}
+
+            </button>
+
+
+        </div>
+
 
     </form>
 
+
+</main>
+
+
+<script>
+
+
+// ===================================
+// CAMERA + MICROPHONE
+// ===================================
+
+const camera =
+    document.getElementById("camera");
+
+const cameraStatus =
+    document.getElementById(
+        "cameraStatus"
+    );
+
+
+async function startCamera() {
+
+    try {
+
+        const stream =
+            await navigator
+            .mediaDevices
+            .getUserMedia({
+
+                video: true,
+
+                audio: true
+
+            });
+
+
+        camera.srcObject = stream;
+
+
+        cameraStatus.textContent =
+            "Camera and microphone connected";
+
+    }
+
+    catch (error) {
+
+        cameraStatus.textContent =
+            "Camera or microphone permission denied";
+
+        console.error(error);
+
+    }
+
+}
+
+
+startCamera();
+
+
+// ===================================
+// SPEECH RECOGNITION
+// ===================================
+
+const SpeechRecognition =
+
+    window.SpeechRecognition ||
+
+    window.webkitSpeechRecognition;
+
+
+const recordButton =
+    document.getElementById(
+        "recordButton"
+    );
+
+
+const recordingStatus =
+    document.getElementById(
+        "recordingStatus"
+    );
+
+
+const answerBox =
+    document.getElementById(
+        "answer"
+    );
+
+
+if (SpeechRecognition) {
+
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    recognition.continuous = true;
+
+    recognition.interimResults = true;
+
+    recognition.lang = "en-US";
+
+
+    let finalTranscript = "";
+
+    let recording = false;
+
+
+    recognition.onstart =
+        function () {
+
+
+            recording = true;
+
+
+            recordButton.textContent =
+                "■ Stop Answer";
+
+
+            recordingStatus.textContent =
+                "Listening...";
+
+        };
+
+
+    recognition.onresult =
+        function (event) {
+
+
+            let interimTranscript = "";
+
+
+            for (
+
+                let i = event.resultIndex;
+
+                i < event.results.length;
+
+                i++
+
+            ) {
+
+
+                const transcript =
+                    event
+                    .results[i][0]
+                    .transcript;
+
+
+                if (
+                    event.results[i].isFinal
+                ) {
+
+
+                    finalTranscript +=
+                        transcript + " ";
+
+                }
+
+                else {
+
+
+                    interimTranscript +=
+                        transcript;
+
+                }
+
+            }
+
+
+            answerBox.value =
+
+                finalTranscript +
+
+                interimTranscript;
+
+        };
+
+
+    recognition.onend =
+        function () {
+
+
+            recording = false;
+
+
+            recordButton.textContent =
+                "🎙 Start Answer";
+
+
+            recordingStatus.textContent =
+                "Stopped";
+
+        };
+
+
+    recordButton.onclick =
+        function () {
+
+
+            if (!recording) {
+
+
+                finalTranscript =
+                    answerBox.value;
+
+
+                recognition.start();
+
+            }
+
+            else {
+
+
+                recognition.stop();
+
+            }
+
+        };
+
+
+}
+
+else {
+
+
+    recordButton.disabled = true;
+
+
+    recordingStatus.textContent =
+
+        "Speech recognition is not supported in this browser.";
+
+}
+
+
+</script>
+
+
 </body>
+
 </html>

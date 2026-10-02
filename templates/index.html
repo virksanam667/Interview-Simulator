@@ -1,43 +1,124 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
+
 <head>
-    <title>AI Interview Simulator</title>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LLM Conversation Memory</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
+
 
 <body>
 
-    <h1>AI Interview Simulator</h1>
+<div class="chat-container">
 
-    <p>Practice an interview tailored to the job you want.</p>
+    <div class="header">
 
-    <form action="/start" method="POST" enctype="multipart/form-data">
+        <h1>LLM Conversation</h1>
 
-        <h2>Your Resume</h2>
-
-        <input
-            type="file"
-            name="resume"
-            accept=".pdf"
-            required
+        <form
+            action="/clear"
+            method="POST"
         >
 
-        <h2>Job Description</h2>
+            <button
+                class="clear-button"
+                type="submit"
+            >
+                Clear
+            </button>
 
-        <textarea
-            name="job_description"
-            rows="10"
-            cols="60"
-            placeholder="Paste the job description here..."
+        </form>
+
+    </div>
+
+
+    <!-- SCROLLABLE CONVERSATION -->
+
+    <div
+        class="conversation"
+        id="conversation"
+    >
+
+        {% for message in messages %}
+
+
+            {% if message.role == "assistant" %}
+
+                <div class="message assistant-message">
+
+                    {{ message.content | safe }}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="message user-message">
+
+                    {{ message.content }}
+
+                </div>
+
+            {% endif %}
+
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- INPUT STAYS AT BOTTOM -->
+
+    <form
+        class="input-area"
+        method="POST"
+    >
+
+        <input
+            type="text"
+            name="user_prompt"
+            placeholder="Type a message..."
+            autocomplete="off"
             required
-        ></textarea>
-
-        <br><br>
+            autofocus
+        >
 
         <button type="submit">
-            Start Interview
+            Send
         </button>
 
     </form>
 
+</div>
+
+
+<script>
+
+    // Automatically scroll to newest message
+
+    const conversation =
+        document.getElementById("conversation");
+
+    conversation.scrollTop =
+        conversation.scrollHeight;
+
+</script>
+
+
 </body>
+
 </html>

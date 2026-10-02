@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f5f5f5;
+}
+
+.chat-container {
+    width: 700px;
+    max-width: 90%;
+
+    height: 650px;
+
+    margin: 40px auto;
+
+    display: flex;
+    flex-direction: column;
+
+    background: white;
+
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.header {
+    padding: 15px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #dddddd;
+}
+
+.header h1 {
+    margin: 0;
+
+    font-size: 22px;
+}
+
+.clear-button {
+    padding: 8px 14px;
+
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+
+/* Conversation scrolls */
+
+.conversation {
+    flex: 1;
+
+    padding: 20px;
+
+    overflow-y: auto;
+}
+
+
+/* All messages */
+
+.message {
+    max-width: 70%;
+
+    margin-bottom: 15px;
+
+    padding: 12px 16px;
+
+    border-radius: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* AI = LEFT */
+
+.assistant-message {
+    margin-right: auto;
+
+    background: #eeeeee;
+}
+
+
+/* User = RIGHT */
+
+.user-message {
+    margin-left: auto;
+
+    background: #d8d8d8;
+}
+
+
+/* Markdown formatting */
+
+.assistant-message p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.assistant-message p:last-child {
+    margin-bottom: 0;
+}
+
+.assistant-message ul,
+.assistant-message ol {
+    padding-left: 22px;
+}
+
+.assistant-message code {
+    padding: 2px 5px;
+
+    background: #dddddd;
+
+    border-radius: 4px;
+}
+
+
+/* Input stays at bottom */
+
+.input-area {
+    padding: 15px;
+
+    display: flex;
+    gap: 10px;
+
+    border-top: 1px solid #dddddd;
+
+    background: white;
+}
+
+.input-area input {
+    flex: 1;
+
+    padding: 12px;
+
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    font-size: 15px;
+}
+
+.input-area button {
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #333333;
+    color: white;
+
+    cursor: pointer;
+}
